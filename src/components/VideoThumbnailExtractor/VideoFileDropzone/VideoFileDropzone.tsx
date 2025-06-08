@@ -11,6 +11,7 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dragCounterRef = useRef(0);
 
   // file select
   const handleFileSelect = (file: File) => {
@@ -31,24 +32,35 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
   };
 
   // drag
+  const handleDragEnter = (e: DragEvent) => {
+    e.preventDefault();
+    dragCounterRef.current++;
+    if (dragCounterRef.current === 1) {
+      setIsDragging(true);
+    }
+  };
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
-    setIsDragging(true);
   };
   const handleDragLeave = (e: DragEvent) => {
     e.preventDefault();
-    setIsDragging(false);
+    dragCounterRef.current--;
+    if (dragCounterRef.current === 0) {
+      setIsDragging(false);
+    }
   };
   const handleDrop = (e: DragEvent) => {
     e.preventDefault();
+    dragCounterRef.current = 0;
     setIsDragging(false);
-    console.log(e);
 
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
       handleFileSelect(files[0]);
     }
   };
+
+  // click
   const handleClick = () => fileInputRef.current?.click();
 
   return (
@@ -57,6 +69,7 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
         className={styles.drag({
           isDragging,
         })}
+        onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
