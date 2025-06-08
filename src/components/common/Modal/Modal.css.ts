@@ -13,7 +13,7 @@ export const backdrop = style({
 export const container = style({
   position: 'relative',
   backgroundColor: '#fff',
-  borderRadius: '0.5rem',
+  borderRadius: '0.8rem',
   boxShadow: '0 10px 15px rgba(0,0,0,0.1)',
   maxWidth: '28rem',
   width: '100%',
