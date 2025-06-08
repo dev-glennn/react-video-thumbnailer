@@ -5,7 +5,7 @@ export const buttonBase = style({
   padding: '0.5rem 1rem',
   fontWeight: 500,
   borderRadius: '0.375rem',
-  fontSize: '0.875rem',
+  fontSize: '1rem',
   cursor: 'pointer',
   border: 'none',
   transition: 'background-color 0.2s, color 0.2s',
