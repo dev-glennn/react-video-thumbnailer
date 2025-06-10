@@ -1,3 +1,4 @@
+export const VIDEO_ACCEPT = 'video/*';
 export const VIDEO_SUPPORTED_FORMATS = [
   'video/mp4',
   'video/avi',

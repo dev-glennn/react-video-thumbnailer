@@ -12,3 +12,5 @@ export const BackIcon = memo(({ className = '' }: { className?: string }) => {
     </svg>
   );
 });
+
+BackIcon.displayName = 'BackIcon';

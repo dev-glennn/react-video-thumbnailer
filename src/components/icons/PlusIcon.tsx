@@ -19,3 +19,5 @@ export const PlusIcon = memo(({ className = '' }: { className?: string }) => {
     </svg>
   );
 });
+
+PlusIcon.displayName = 'PlusIcon';
