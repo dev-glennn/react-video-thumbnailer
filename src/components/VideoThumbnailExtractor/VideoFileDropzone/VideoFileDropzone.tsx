@@ -1,7 +1,7 @@
 import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
 import * as styles from './VideoFileDropzone.css';
 import { Button } from '~/components/common';
-import { isVideoFile } from '~/features/videoThumbnailExtractor/utils';
+import { isVideoFile } from '~/utils';
 import videoImage from '~/assets/video.png';
 
 interface VideoFileDropzoneProps {
