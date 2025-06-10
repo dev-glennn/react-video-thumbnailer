@@ -1,12 +1,12 @@
 import { useCallback, useRef, useState, type DragEvent } from 'react';
 
 interface UseDragAndDropOptions {
-  onDrop: (data: DataTransfer | null) => void;
+  onDrop: (data: DataTransfer) => void;
   onDragEnter?: (e: DragEvent) => void;
   onDragLeave?: (e: DragEvent) => void;
 }
 
-// 드래그 앤 드롭
+// 드래그 & 드롭 핸들러를 관리할 수 있는 훅
 export const useDragAndDrop = ({
   onDrop,
   onDragEnter,

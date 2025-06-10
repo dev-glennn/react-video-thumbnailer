@@ -1,39 +1,25 @@
-import { useRef, useState, type ChangeEvent } from 'react';
+import { useRef, type ChangeEvent } from 'react';
 import * as styles from './VideoFileDropzone.css';
 import { Button } from '~/components/common';
-import { isVideoFile } from '~/utils';
 import videoImage from '~/assets/video.png';
-import { useDragAndDrop } from '~/hooks';
+import { useFileDrop, useVideoFileHandler } from '~/hooks';
+import { VIDEO_ACCEPT } from '~/utils';
 
 interface VideoFileDropzoneProps {
   onFileSelect: (file: File) => void;
 }
 
 export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
-  const [error, setError] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDrop = (dataTransfer: DataTransfer | null) => {
-    if (!dataTransfer) return;
-    const files = Array.from(dataTransfer.files);
-    if (files.length > 0) {
-      handleFileSelect(files[0]);
-    }
-  };
-
-  const { isDragging, handlers } = useDragAndDrop({
-    onDrop: handleDrop,
+  const { error, handleFileSelect, clearError } = useVideoFileHandler({
+    onFileSelect,
   });
 
-  // file select
-  const handleFileSelect = (file: File) => {
-    if (!isVideoFile(file)) {
-      setError('동영상 파일만 선택할 수 있습니다.');
-      return;
-    }
-    setError('');
-    onFileSelect(file);
-  };
+  const { isDragging, handlers } = useFileDrop({
+    onFileDrop: handleFileSelect,
+    accept: [VIDEO_ACCEPT],
+  });
 
   // file change
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +30,10 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
   };
 
   // click
-  const handleClick = () => fileInputRef.current?.click();
+  const handleClick = () => {
+    clearError();
+    fileInputRef.current?.click();
+  };
 
   return (
     <>
@@ -70,7 +59,7 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept="video/*"
+        accept={VIDEO_ACCEPT}
         onChange={handleInputChange}
         className="hidden"
       />
