@@ -12,15 +12,16 @@ export const useFileDrop = ({ onFileDrop, accept }: useFileDropOptions) => {
     (dataTransfer: DataTransfer) => {
       if (!dataTransfer) return;
       const files = Array.from(dataTransfer.files);
-      const filterFiles = accept
-        ? files.filter((file) =>
-            accept.some(
-              (acceptType) =>
-                file.type.includes(acceptType) ||
-                file.type.includes(acceptType.replace('/*', ''))
+      const filterFiles =
+        accept && files.length > 1
+          ? files.filter((file) =>
+              accept.some(
+                (acceptType) =>
+                  file.type.includes(acceptType) ||
+                  file.type.includes(acceptType.replace('/*', ''))
+              )
             )
-          )
-        : files;
+          : files;
       onFileDrop(filterFiles[0]);
     },
     [accept, onFileDrop]

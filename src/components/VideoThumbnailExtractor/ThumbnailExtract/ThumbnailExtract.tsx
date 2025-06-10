@@ -1,9 +1,8 @@
 import * as styles from './ThumbnailExtract.css';
-import { CloseIcon, PlusIcon } from '~/components/icons';
 import type { ThumbnailData } from '~/types';
 import { useThumbnailExtract, useVideoKeyControls } from '~/hooks';
 import { VideoPlayer } from './VideoPlayer';
-import { ThumbnailItem } from './ThumbnailItem';
+import { ThumbnailGrid } from './ThumbnailGrid';
 
 interface ThumbnailExtractProps {
   videoFile: File;
@@ -43,28 +42,12 @@ export const ThumbnailExtract = ({
         />
       )}
       {/* Thumbnails */}
-      <div
-        className={styles.thumbnailsWrap({
-          layout: thumbnails.length > 4 ? 'scrollable' : 'base',
-        })}
-      >
-        {thumbnails.length > 0 &&
-          thumbnails.map((thumbnail) => (
-            <ThumbnailItem
-              key={thumbnail.id}
-              thumbnail={thumbnail}
-              onRemove={handleRemoveThumbnail}
-            />
-          ))}
-        {canExtractMore && (
-          <button
-            className={`${styles.thumbnailChild} ${styles.extractButton}`}
-            onClick={handleExtractThumbnail}
-          >
-            <PlusIcon />
-          </button>
-        )}
-      </div>
+      <ThumbnailGrid
+        thumbnails={thumbnails}
+        canExtractMore={canExtractMore}
+        onExtract={handleExtractThumbnail}
+        onRemove={handleRemoveThumbnail}
+      />
     </div>
   );
 };

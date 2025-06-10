@@ -22,6 +22,7 @@ export const ThumbnailItem = memo(
           className={styles.thumbnailImage}
           src={thumbnail.imageData}
           alt={`썸네일 ${thumbnail.formattedTime}`}
+          loading="lazy"
         />
         <span className={styles.thumbnailTime}>{thumbnail.formattedTime}</span>
       </div>
