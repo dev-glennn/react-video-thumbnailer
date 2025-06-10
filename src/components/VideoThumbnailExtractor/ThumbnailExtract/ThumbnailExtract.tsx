@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import * as styles from './ThumbnailExtract.css';
 import { CloseIcon, PlusIcon } from '~/components/icons';
-import { formatTime, generateId } from '~/utils';
 import type { ThumbnailData } from '~/types';
+import { useThumbnailExtract } from '~/hooks';
 
 interface ThumbnailExtractProps {
   videoFile: File;
@@ -15,13 +15,19 @@ export const ThumbnailExtract = ({
   onChange,
   maxThumbnails,
 }: ThumbnailExtractProps) => {
-  const [thumbnails, setThumbnails] = useState<ThumbnailData[]>([]);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const videoUrlRef = useRef<string>('');
-  const [videoUrl, setVideoUrl] = useState<string>('');
-
-  const canExtractMore = thumbnails.length < maxThumbnails;
+  const {
+    thumbnails,
+    videoRef,
+    canvasRef,
+    videoUrl,
+    canExtractMore,
+    handleExtractThumbnail,
+    handleRemoveThumbnail,
+  } = useThumbnailExtract({
+    videoFile,
+    onChange,
+    maxThumbnails,
+  });
 
   useEffect(() => {
     const handleVideoKeyEvents = (e: KeyboardEvent) => {
@@ -56,58 +62,6 @@ export const ThumbnailExtract = ({
       document.removeEventListener('keydown', handleVideoKeyEvents);
     };
   }, []);
-
-  useEffect(() => {
-    onChange(thumbnails);
-  }, [onChange, thumbnails]);
-
-  useEffect(() => {
-    if (videoUrlRef.current) {
-      URL.revokeObjectURL(videoUrlRef.current);
-    }
-
-    const newUrl = URL.createObjectURL(videoFile);
-    videoUrlRef.current = newUrl;
-    setVideoUrl(newUrl);
-
-    return () => {
-      if (videoUrlRef.current) {
-        URL.revokeObjectURL(videoUrlRef.current);
-        videoUrlRef.current = '';
-      }
-    };
-  }, [videoFile]);
-
-  const handleExtractThumbnail = useCallback(() => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (!video || !canvas) return;
-
-    if (!video.paused) videoRef.current?.pause();
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0);
-
-    const imageData = canvas.toDataURL('image/webp', 0.8);
-    const timestamp = video.currentTime;
-
-    const newThumbnail: ThumbnailData = {
-      id: generateId(),
-      imageData,
-      timestamp,
-      formattedTime: formatTime(timestamp),
-    };
-
-    setThumbnails((prev) => [...prev, newThumbnail]);
-  }, []);
-
-  const handleRemoveThumbnail = (id: string) => {
-    setThumbnails((prev) => prev.filter((thumb) => thumb.id !== id));
-  };
 
   return (
     <div className={styles.thumbnailExtractWrap}>
