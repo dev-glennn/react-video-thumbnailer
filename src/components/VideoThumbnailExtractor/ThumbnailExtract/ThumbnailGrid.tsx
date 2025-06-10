@@ -16,7 +16,9 @@ export const ThumbnailGrid = memo(
     const layout = thumbnails.length > 4 ? 'scrollable' : 'base';
 
     return (
-      <div className={styles.thumbnailsWrap({ layout })}>
+      <div
+        className={`${styles.thumbnailsWrap} ${styles.thumbnailLayoutVariants[layout]}`}
+      >
         {thumbnails.map((thumbnail) => (
           <ThumbnailItem
             key={thumbnail.id}

@@ -1,5 +1,4 @@
-import { globalStyle, style } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
+import { globalStyle, style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '~/styles/theme.css';
 
 export const thumbnailExtractWrap = style({
@@ -20,30 +19,24 @@ export const video = style({
   width: '100%',
 });
 
-export const thumbnailsWrap = recipe({
+export const thumbnailsWrap = style({
+  marginTop: '0.65rem',
+  gap: '0.3rem',
+});
+
+export const thumbnailLayoutVariants = styleVariants({
+  scrollable: {
+    overflowX: 'auto',
+    display: 'flex',
+    flexWrap: 'nowrap',
+  },
   base: {
-    marginTop: '0.65rem',
-    gap: '0.3rem',
-  },
-  variants: {
-    layout: {
-      scrollable: {
-        overflowX: 'auto',
-        display: 'flex',
-        flexWrap: 'nowrap',
-      },
-      base: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-      },
-    },
-  },
-  defaultVariants: {
-    layout: 'base',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
   },
 });
 
-globalStyle(`.${thumbnailsWrap({ layout: 'scrollable' })} > *`, {
+globalStyle(`.${thumbnailLayoutVariants['scrollable']} > *`, {
   width: '6.5rem',
   height: '6.5rem',
 });
@@ -104,4 +97,8 @@ export const extractButton = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+});
+
+globalStyle(`${extractButton} > svg`, {
+  stroke: vars.color.gray[500],
 });

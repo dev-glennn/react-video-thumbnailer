@@ -1,33 +1,29 @@
-import { style } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
+import { style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '~/styles/theme.css';
 
-export const drag = recipe({
-  base: {
-    borderWidth: '2px',
-    borderStyle: 'dashed',
-    borderRadius: '0.5rem',
-    padding: '2rem',
-    textAlign: 'center',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '0.65rem',
-    cursor: 'pointer',
+export const dragBase = style({
+  borderWidth: '2px',
+  borderStyle: 'dashed',
+  borderRadius: '0.5rem',
+  padding: '2rem',
+  textAlign: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '0.65rem',
+  cursor: 'pointer',
+});
+
+export const dragVariants = styleVariants({
+  true: {
+    borderColor: vars.color.blue[500],
+    backgroundColor: vars.color.blue[100],
   },
-  variants: {
-    isDragging: {
-      true: {
-        borderColor: vars.color.blue[500],
-        backgroundColor: vars.color.blue[100],
-      },
-      false: {
-        borderColor: vars.color.gray[300],
-        selectors: {
-          '&:hover': {
-            borderColor: vars.color.gray[400],
-          },
-        },
+  false: {
+    borderColor: vars.color.gray[300],
+    selectors: {
+      '&:hover': {
+        borderColor: vars.color.gray[400],
       },
     },
   },
