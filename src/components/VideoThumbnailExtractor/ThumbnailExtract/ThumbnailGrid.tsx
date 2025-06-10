@@ -6,9 +6,9 @@ import { memo } from 'react';
 
 interface ThumbnailGridProps {
   thumbnails: ThumbnailData[];
-  canExtractMore: boolean;
-  onExtract: () => void;
-  onRemove: (id: string) => void;
+  canExtractMore?: boolean;
+  onExtract?: () => void;
+  onRemove?: (id: string) => void;
 }
 
 export const ThumbnailGrid = memo(
@@ -26,7 +26,7 @@ export const ThumbnailGrid = memo(
             onRemove={onRemove}
           />
         ))}
-        {canExtractMore && (
+        {canExtractMore && onExtract && (
           <button
             className={`${styles.thumbnailChild} ${styles.extractButton}`}
             onClick={onExtract}
