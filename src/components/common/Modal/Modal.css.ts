@@ -17,6 +17,6 @@ export const container = style({
   boxShadow: '0 10px 15px rgba(0,0,0,0.1)',
   maxWidth: '28rem',
   width: '100%',
-  maxHeight: '100vh',
+  maxHeight: '90vh',
   overflow: 'auto',
 });

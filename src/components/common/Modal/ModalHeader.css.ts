@@ -4,12 +4,13 @@ import { recipe } from '@vanilla-extract/recipes';
 const IconSize = '2rem';
 
 export const header = style({
-  height: '4rem',
+  height: '3.5rem',
   display: 'grid',
   gridTemplateColumns: `${IconSize} auto ${IconSize}`,
   alignItems: 'center',
   gap: '0.5rem',
   padding: '0 1rem',
+  flexShrink: '0',
 });
 
 export const title = style({
