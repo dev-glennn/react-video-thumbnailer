@@ -1,4 +1,6 @@
-export const PlusIcon = ({ className = '' }: { className?: string }) => {
+import { memo } from 'react';
+
+export const PlusIcon = memo(({ className = '' }: { className?: string }) => {
   return (
     <svg
       className={className}
@@ -6,7 +8,7 @@ export const PlusIcon = ({ className = '' }: { className?: string }) => {
       width="24"
       height="24"
       fill="none"
-      stroke="currentColor"
+      stroke="current"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -16,4 +18,4 @@ export const PlusIcon = ({ className = '' }: { className?: string }) => {
       <line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   );
-};
+});

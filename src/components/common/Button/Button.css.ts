@@ -2,9 +2,8 @@ import { vars } from '~/styles/theme.css';
 import { style, styleVariants } from '@vanilla-extract/css';
 
 export const buttonBase = style({
-  padding: '0.5rem 1rem',
   fontWeight: 500,
-  borderRadius: '0.375rem',
+  borderRadius: '0.625rem',
   fontSize: '1rem',
   cursor: 'pointer',
   border: 'none',
@@ -17,53 +16,47 @@ export const buttonBase = style({
   },
 });
 
+export const buttonSize = styleVariants({
+  sm: {
+    padding: '0.5rem 1rem',
+    fontSize: '0.875rem',
+  },
+  md: {
+    padding: '0.5rem 1rem',
+    fontSize: '1rem',
+  },
+  lg: {
+    padding: '0.75rem 1.25rem',
+    fontSize: '1.125rem',
+  },
+});
+
 export const buttonVariant = styleVariants({
-  primary: [
-    buttonBase,
-    {
-      backgroundColor: vars.color.blue[500],
-      color: vars.color.white,
-      selectors: {
-        '&:hover:not(:disabled)': {
-          backgroundColor: vars.color.blue[600],
-        },
+  primary: {
+    backgroundColor: vars.color.blue[500],
+    color: vars.color.white,
+    selectors: {
+      '&:hover:not(:disabled)': {
+        backgroundColor: vars.color.blue[700],
       },
     },
-  ],
-  success: [
-    buttonBase,
-    {
-      backgroundColor: vars.color.green[500],
-      color: vars.color.white,
-      selectors: {
-        '&:hover:not(:disabled)': {
-          backgroundColor: vars.color.green[600],
-        },
+  },
+  success: {
+    backgroundColor: vars.color.green[500],
+    color: vars.color.white,
+    selectors: {
+      '&:hover:not(:disabled)': {
+        backgroundColor: vars.color.green[600],
       },
     },
-  ],
-  text: [
-    buttonBase,
-    {
-      backgroundColor: vars.color.white,
-      color: vars.color.black,
-      selectors: {
-        '&:hover:not(:disabled)': {
-          backgroundColor: vars.color.gray[100],
-        },
+  },
+  secondary: {
+    backgroundColor: vars.color.gray[100],
+    color: vars.color.gray[600],
+    selectors: {
+      '&:hover:not(:disabled)': {
+        backgroundColor: vars.color.gray[200],
       },
     },
-  ],
-  textSuccess: [
-    buttonBase,
-    {
-      backgroundColor: vars.color.white,
-      color: vars.color.green[600],
-      selectors: {
-        '&:hover:not(:disabled)': {
-          backgroundColor: vars.color.green[100],
-        },
-      },
-    },
-  ],
+  },
 });
