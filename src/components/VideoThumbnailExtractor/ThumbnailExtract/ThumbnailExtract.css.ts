@@ -98,3 +98,7 @@ export const extractButton = style({
   alignItems: 'center',
   justifyContent: 'center',
 });
+
+globalStyle(`${extractButton} > svg`, {
+  stroke: vars.color.gray[500],
+});
