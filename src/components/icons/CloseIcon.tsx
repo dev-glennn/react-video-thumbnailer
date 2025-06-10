@@ -12,3 +12,5 @@ export const CloseIcon = memo(({ className = '' }: { className?: string }) => {
     </svg>
   );
 });
+
+CloseIcon.displayName = 'CloseIcon';

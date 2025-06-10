@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import * as styles from './ThumbnailExtract.css';
 import { CloseIcon, PlusIcon } from '~/components/icons';
 import type { ThumbnailData } from '~/types';
 import { useThumbnailExtract, useVideoKeyControls } from '~/hooks';
+import { VideoPlayer } from './VideoPlayer';
 
 interface ThumbnailExtractProps {
   videoFile: File;
@@ -35,15 +35,11 @@ export const ThumbnailExtract = ({
     <div className={styles.thumbnailExtractWrap}>
       {/* Video Player */}
       {videoUrl && (
-        <div className={styles.videoWrap}>
-          <video
-            ref={videoRef}
-            src={videoUrl}
-            controls
-            className={styles.video}
-          />
-          <canvas ref={canvasRef} className="hidden" />
-        </div>
+        <VideoPlayer
+          videoRef={videoRef}
+          canvasRef={canvasRef}
+          videoUrl={videoUrl}
+        />
       )}
       {/* Thumbnails */}
       <div
