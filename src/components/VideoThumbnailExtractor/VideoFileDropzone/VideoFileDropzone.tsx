@@ -38,9 +38,7 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
   return (
     <>
       <div
-        className={styles.drag({
-          isDragging,
-        })}
+        className={`${styles.dragBase} ${isDragging ? styles.dragVariants.true : styles.dragVariants.false}`}
         onClick={handleClick}
         {...handlers}
       >
