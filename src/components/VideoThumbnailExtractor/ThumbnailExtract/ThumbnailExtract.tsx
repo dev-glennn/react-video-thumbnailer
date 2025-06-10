@@ -1,11 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ThumbnailData } from '~/features/videoThumbnailExtractor/video';
 import * as styles from './ThumbnailExtract.css';
 import { CloseIcon, PlusIcon } from '~/components/icons';
-import {
-  formatTime,
-  generateId,
-} from '~/features/videoThumbnailExtractor/utils';
+import { formatTime, generateId } from '~/utils';
+import type { ThumbnailData } from '~/types';
 
 interface ThumbnailExtractProps {
   videoFile: File;

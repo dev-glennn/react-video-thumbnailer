@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import * as styles from './VideoThumbnailExtractor.css';
 import { ThumbnailExtract, VideoFileDropzone } from '.';
 import { Button, Modal, ModalBody, ModalHeader } from '../common';
-import type { ThumbnailData } from '~/features/videoThumbnailExtractor/video';
+import type { ThumbnailData } from '~/types';
 
 interface VideoThumbnailExtractorProps {
   isOpen: boolean;
