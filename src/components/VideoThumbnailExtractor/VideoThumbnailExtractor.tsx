@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 import * as styles from './VideoThumbnailExtractor.css';
 import { ThumbnailExtract, VideoFileDropzone } from '.';
 import { Button, Modal, ModalBody, ModalHeader } from '../common';
@@ -12,11 +12,46 @@ interface VideoThumbnailExtractorProps {
 }
 
 const DEFAULT_MAX_THUMBNAILS = 4;
-const STEP = {
-  UPLOAD: 'upload',
-  EXTRACT: 'extract',
+
+interface State {
+  step: 'upload' | 'extract';
+  file: File | null;
+  thumbnails: ThumbnailData[];
+}
+type Action =
+  | { type: 'RESET' }
+  | { type: 'SET_FILE'; payload: File }
+  | { type: 'SET_THUMBNAILS'; payload: ThumbnailData[] };
+const initialState: State = {
+  step: 'upload',
+  file: null,
+  thumbnails: [],
+};
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'RESET':
+      return initialState;
+    case 'SET_FILE':
+      return {
+        ...state,
+        file: action.payload,
+        step: 'extract',
+        thumbnails: [],
+      };
+    case 'SET_THUMBNAILS':
+      return {
+        ...state,
+        thumbnails: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const STEP_TITLES = {
+  upload: '동영상 업로드',
+  extract: '사진 올리기',
 } as const;
-type Step = (typeof STEP)[keyof typeof STEP];
 
 export const VideoThumbnailExtractor = ({
   isOpen,
@@ -24,50 +59,64 @@ export const VideoThumbnailExtractor = ({
   onSubmit,
   maxThumbnails = DEFAULT_MAX_THUMBNAILS,
 }: VideoThumbnailExtractorProps) => {
-  const [step, setStep] = useState<Step>(STEP.UPLOAD);
-  const [file, setFile] = useState<File | null>(null);
-  const [thumbnails, setThumbnails] = useState<ThumbnailData[]>([]);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { step, file, thumbnails } = state;
 
-  const stepIsUpload = step === STEP.UPLOAD;
-  const stepIsExtract = step === STEP.EXTRACT;
-  const title = stepIsUpload ? '동영상 업로드' : '사진 올리기';
+  const stepIsUpload = useMemo(() => step === 'upload', [step]);
+  const stepIsExtract = useMemo(() => step === 'extract', [step]);
+  const title = useMemo(() => STEP_TITLES[step], [step]);
+  const hasNoThumbnails = useMemo(
+    () => thumbnails.length === 0,
+    [thumbnails.length]
+  );
 
-  const handleFileSelect = (file: File) => {
-    setFile(file);
-    setStep('extract');
-  };
+  const handleFileSelect = useCallback((file: File) => {
+    dispatch({ type: 'SET_FILE', payload: file });
+  }, []);
 
   const handleInit = useCallback(() => {
-    setStep('upload');
-    setFile(null);
+    dispatch({ type: 'RESET' });
+  }, []);
+
+  const handleThumbnailsChange = useCallback((thumbnails: ThumbnailData[]) => {
+    dispatch({ type: 'SET_THUMBNAILS', payload: thumbnails });
   }, []);
 
   const handleSubmit = useCallback(() => {
-    if (!thumbnails.length) {
+    if (hasNoThumbnails) {
       alert('추출된 썸네일이 없어요');
       return;
     }
     console.log(thumbnails);
     onSubmit(thumbnails);
     onClose();
-  }, [onClose, onSubmit, thumbnails]);
+  }, [hasNoThumbnails, onClose, onSubmit, thumbnails]);
+
+  const handleClose = useCallback(() => {
+    dispatch({ type: 'RESET' });
+    onClose();
+  }, [onClose]);
 
   useEffect(() => {
     // 초기화
     if (!isOpen) {
-      handleInit();
+      dispatch({ type: 'RESET' });
     }
-  }, [handleInit, isOpen]);
+  }, [isOpen]);
 
   return (
-    <Modal containerClassName={styles.modal} isOpen={isOpen} onClose={onClose}>
+    <Modal
+      containerClassName={styles.modal}
+      isOpen={isOpen}
+      onClose={handleClose}
+    >
       <ModalHeader onClose={onClose}>{title}</ModalHeader>
       <ModalBody>
         {stepIsUpload && <VideoFileDropzone onFileSelect={handleFileSelect} />}
         {stepIsExtract && file && (
           <ThumbnailExtract
             videoFile={file}
-            onChange={setThumbnails}
+            onChange={handleThumbnailsChange}
             maxThumbnails={maxThumbnails}
           />
         )}
