@@ -1,54 +1,73 @@
-# React + TypeScript + Vite
+# 📹 react-video-thumbnailer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+비디오 파일로부터 썸네일을 추출하는 React 컴포넌트입니다.  
+**업로드 → 썸네일 추출 → 선택 및 전달** 과정을 모달로 제공합니다.
 
-Currently, two official plugins are available:
+> ✅ React + TypeScript + Vite 기반  
+> ✅ Drag & Drop 지원  
+> ✅ 썸네일 추출 개수 제한 가능  
+> ✅ 선택된 썸네일을 외부로 전달
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 📦 설치
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+```bash
+npm install react-video-thumbnailer
+# 또는
+yarn add react-video-thumbnailer
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+## 🚀 사용 방법
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
+```typescript
+import { useState } from 'react';
+import { VideoThumbnailExtractor } from 'react-video-thumbnailer';
+import type { ThumbnailData } from 'react-video-thumbnailer/types';
+
+function App() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [thumbnails, setThumbnails] = useState<ThumbnailData[]>([]);
+
+  return (
+    <>
+      <button onClick={() => setIsOpen(true)}>썸네일 추출하기</button>
+      <VideoThumbnailExtractor
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        onSubmit={(data) => {
+          setThumbnails(data);
+          setIsOpen(false);
+        }}
+        maxThumbnails={4}
+      />
+    </>
+  );
+}
+
 ```
+
+---
+
+## ⚙️ Props
+### `<VideoThumbnailExtractor />`
+| Prop            | Type                                    | Required | Description              |
+| --------------- | --------------------------------------- | -------- | ------------------------ |
+| `isOpen`        | `boolean`                               | ✅        | 모달 열림 여부                 |
+| `onClose`       | `() => void`                            | ✅        | 모달 닫기 콜백                 |
+| `onSubmit`      | `(thumbnails: ThumbnailData[]) => void` | ✅        | 썸네일 선택 후 제출 콜백           |
+| `maxThumbnails` | `number`                                | ❌        | 최대 추출 가능한 썸네일 개수 (기본: 4) |
+
+---
+
+## 🛠 개발 환경
+- Node 22.X
+- React 19
+- TypeScript
+- Vite
+- vanilla-extract (스타일링)
+
+
+
