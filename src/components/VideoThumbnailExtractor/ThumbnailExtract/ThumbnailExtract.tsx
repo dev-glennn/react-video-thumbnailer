@@ -3,6 +3,7 @@ import { CloseIcon, PlusIcon } from '~/components/icons';
 import type { ThumbnailData } from '~/types';
 import { useThumbnailExtract, useVideoKeyControls } from '~/hooks';
 import { VideoPlayer } from './VideoPlayer';
+import { ThumbnailItem } from './ThumbnailItem';
 
 interface ThumbnailExtractProps {
   videoFile: File;
@@ -49,23 +50,11 @@ export const ThumbnailExtract = ({
       >
         {thumbnails.length > 0 &&
           thumbnails.map((thumbnail) => (
-            <div
+            <ThumbnailItem
               key={thumbnail.id}
-              className={`${styles.thumbnailChild} ${styles.thumbnail}`}
-              onClick={() => handleRemoveThumbnail(thumbnail.id)}
-            >
-              <button className={styles.thumbnailRemoveButton}>
-                <CloseIcon />
-              </button>
-              <img
-                className={styles.thumbnailImage}
-                src={thumbnail.imageData}
-                alt={`썸네일 ${thumbnail.formattedTime}`}
-              />
-              <span className={styles.thumbnailTime}>
-                {thumbnail.formattedTime}
-              </span>
-            </div>
+              thumbnail={thumbnail}
+              onRemove={handleRemoveThumbnail}
+            />
           ))}
         {canExtractMore && (
           <button
