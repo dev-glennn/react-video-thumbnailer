@@ -1,18 +1,29 @@
-import { useRef, useState, type ChangeEvent, type DragEvent } from 'react';
+import { useRef, useState, type ChangeEvent } from 'react';
 import * as styles from './VideoFileDropzone.css';
 import { Button } from '~/components/common';
 import { isVideoFile } from '~/utils';
 import videoImage from '~/assets/video.png';
+import { useDragAndDrop } from '~/hooks';
 
 interface VideoFileDropzoneProps {
   onFileSelect: (file: File) => void;
 }
 
 export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
-  const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const dragCounterRef = useRef(0);
+
+  const handleDrop = (dataTransfer: DataTransfer | null) => {
+    if (!dataTransfer) return;
+    const files = Array.from(dataTransfer.files);
+    if (files.length > 0) {
+      handleFileSelect(files[0]);
+    }
+  };
+
+  const { isDragging, handlers } = useDragAndDrop({
+    onDrop: handleDrop,
+  });
 
   // file select
   const handleFileSelect = (file: File) => {
@@ -32,35 +43,6 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
     }
   };
 
-  // drag
-  const handleDragEnter = (e: DragEvent) => {
-    e.preventDefault();
-    dragCounterRef.current++;
-    if (dragCounterRef.current === 1) {
-      setIsDragging(true);
-    }
-  };
-  const handleDragOver = (e: DragEvent) => {
-    e.preventDefault();
-  };
-  const handleDragLeave = (e: DragEvent) => {
-    e.preventDefault();
-    dragCounterRef.current--;
-    if (dragCounterRef.current === 0) {
-      setIsDragging(false);
-    }
-  };
-  const handleDrop = (e: DragEvent) => {
-    e.preventDefault();
-    dragCounterRef.current = 0;
-    setIsDragging(false);
-
-    const files = Array.from(e.dataTransfer.files);
-    if (files.length > 0) {
-      handleFileSelect(files[0]);
-    }
-  };
-
   // click
   const handleClick = () => fileInputRef.current?.click();
 
@@ -70,11 +52,8 @@ export const VideoFileDropzone = ({ onFileSelect }: VideoFileDropzoneProps) => {
         className={styles.drag({
           isDragging,
         })}
-        onDragEnter={handleDragEnter}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
         onClick={handleClick}
+        {...handlers}
       >
         <div className={styles.icon}>
           <img src={videoImage} />
