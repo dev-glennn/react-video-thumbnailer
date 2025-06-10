@@ -1,5 +1,4 @@
-import { globalStyle, style } from '@vanilla-extract/css';
-import { recipe } from '@vanilla-extract/recipes';
+import { globalStyle, style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '~/styles/theme.css';
 
 const IconSize = '1.5rem';
@@ -21,21 +20,18 @@ export const title = style({
   textAlign: 'center',
 });
 
-export const button = recipe({
-  base: {
-    width: IconSize,
-    height: IconSize,
-    cursor: 'pointer',
+export const button = style({
+  width: IconSize,
+  height: IconSize,
+  cursor: 'pointer',
+});
+
+export const buttonPositionVariants = styleVariants({
+  left: {
+    gridColumn: '1/2',
   },
-  variants: {
-    position: {
-      left: {
-        gridColumn: '1/2',
-      },
-      right: {
-        gridColumn: '3/4',
-      },
-    },
+  right: {
+    gridColumn: '3/4',
   },
 });
 

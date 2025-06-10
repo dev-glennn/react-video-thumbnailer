@@ -19,7 +19,7 @@ export const ModalHeader = ({
     <div className={`${styles.header} ${className}`}>
       {onBack && (
         <button
-          className={styles.button({ position: 'left' })}
+          className={`${styles.button} ${styles.buttonPositionVariants['left']}`}
           onClick={onBack}
           aria-label="뒤로가기"
         >
@@ -29,7 +29,7 @@ export const ModalHeader = ({
       <div className={styles.title}>{children}</div>
       {onClose && (
         <button
-          className={styles.button({ position: 'right' })}
+          className={`${styles.button} ${styles.buttonPositionVariants['right']}`}
           onClick={onClose}
           aria-label="닫기"
         >

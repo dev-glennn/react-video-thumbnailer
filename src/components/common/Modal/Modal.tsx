@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Portal } from './Portal';
-import * as styles from './Modal.css.ts';
+import * as styles from './Modal.css';
 
 interface ModalProps {
   isOpen: boolean;
