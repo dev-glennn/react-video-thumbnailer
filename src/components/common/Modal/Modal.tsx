@@ -57,7 +57,7 @@ export const Modal = ({
       >
         <div
           ref={modalRef}
-          className={`${styles.container} ${containerClassName}`}
+          className={`${styles.modal} ${containerClassName}`}
           onClick={(e) => e.stopPropagation()}
         >
           {children}

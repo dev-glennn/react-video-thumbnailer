@@ -1,7 +1,8 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
+import { vars } from '~/styles/theme.css';
 
-const IconSize = '2rem';
+const IconSize = '1.5rem';
 
 export const header = style({
   height: '3.5rem',
@@ -9,13 +10,13 @@ export const header = style({
   gridTemplateColumns: `${IconSize} auto ${IconSize}`,
   alignItems: 'center',
   gap: '0.5rem',
-  padding: '0 1rem',
+  padding: '0 1.5rem',
   flexShrink: '0',
 });
 
 export const title = style({
   gridColumn: '2/3',
-  fontSize: '1.2rem',
+  fontSize: '1.25rem',
   fontWeight: 700,
   textAlign: 'center',
 });
@@ -36,4 +37,8 @@ export const button = recipe({
       },
     },
   },
+});
+
+globalStyle(`${button} svg`, {
+  stroke: vars.color.gray[500],
 });
