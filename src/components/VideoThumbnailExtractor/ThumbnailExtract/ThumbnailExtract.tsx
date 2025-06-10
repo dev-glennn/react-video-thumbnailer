@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ThumbnailData } from '~/features/videoThumbnailExtractor/video';
 import * as styles from './ThumbnailExtract.css';
 import { CloseIcon, PlusIcon } from '~/components/icons';
@@ -9,40 +9,77 @@ import {
 
 interface ThumbnailExtractProps {
   videoFile: File;
-  onSubmit: (thumbnails: ThumbnailData[]) => void;
-  onBack: () => void;
+  onChange: (thumbnails: ThumbnailData[]) => void;
   maxThumbnails: number;
 }
 
 export const ThumbnailExtract = ({
   videoFile,
-  onSubmit,
-  onBack,
+  onChange,
   maxThumbnails,
 }: ThumbnailExtractProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [thumbnails, setThumbnails] = useState<ThumbnailData[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoUrlRef = useRef<string>('');
+  const [videoUrl, setVideoUrl] = useState<string>('');
 
   const canExtractMore = thumbnails.length < maxThumbnails;
 
-  const videoUrl = useMemo(() => {
-    return URL.createObjectURL(videoFile);
-  }, [videoFile]);
+  useEffect(() => {
+    const handleVideoKeyEvents = (e: KeyboardEvent) => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (
+        document.activeElement === video ||
+        ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName ?? '')
+      )
+        return;
+
+      switch (e.code) {
+        case 'Space':
+        case 'Enter':
+          if (video.paused) {
+            video.play();
+          } else {
+            video.pause();
+          }
+          break;
+        case 'ArrowRight':
+          video.currentTime += 5;
+          break;
+        case 'ArrowLeft':
+          video.currentTime -= 5;
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleVideoKeyEvents);
+    return () => {
+      document.removeEventListener('keydown', handleVideoKeyEvents);
+    };
+  }, []);
 
   useEffect(() => {
-    return () => {
-      // URL.revokeObjectURL(videoUrl);
-    };
-  }, [videoUrl]);
+    onChange(thumbnails);
+  }, [onChange, thumbnails]);
 
-  const handleVideoPlay = () => {
-    setIsPlaying(true);
-  };
-  const handleVideoPause = () => {
-    setIsPlaying(false);
-  };
+  useEffect(() => {
+    if (videoUrlRef.current) {
+      URL.revokeObjectURL(videoUrlRef.current);
+    }
+
+    const newUrl = URL.createObjectURL(videoFile);
+    videoUrlRef.current = newUrl;
+    setVideoUrl(newUrl);
+
+    return () => {
+      if (videoUrlRef.current) {
+        URL.revokeObjectURL(videoUrlRef.current);
+        videoUrlRef.current = '';
+      }
+    };
+  }, [videoFile]);
 
   const handleExtractThumbnail = useCallback(() => {
     const video = videoRef.current;
@@ -53,7 +90,6 @@ export const ThumbnailExtract = ({
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    console.log(ctx);
 
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -77,25 +113,30 @@ export const ThumbnailExtract = ({
   };
 
   return (
-    <div>
+    <div className={styles.thumbnailExtractWrap}>
       {/* Video Player */}
-      <div className="">
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          controls
-          className=""
-          onPlay={handleVideoPlay}
-          onPause={handleVideoPause}
-        />
-        <canvas ref={canvasRef} className="hidden" />
-      </div>
+      {videoUrl && (
+        <div className={styles.videoWrap}>
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            controls
+            className={styles.video}
+          />
+          <canvas ref={canvasRef} className="hidden" />
+        </div>
+      )}
       {/* Thumbnails */}
-      <div className={styles.thumbnailsWrap}>
+      <div
+        className={styles.thumbnailsWrap({
+          layout: thumbnails.length > 4 ? 'scrollable' : 'base',
+        })}
+      >
         {thumbnails.length > 0 &&
           thumbnails.map((thumbnail) => (
             <div
-              className={styles.thumbnail}
+              key={thumbnail.id}
+              className={`${styles.thumbnailChild} ${styles.thumbnail}`}
               onClick={() => handleRemoveThumbnail(thumbnail.id)}
             >
               <button className={styles.thumbnailRemoveButton}>
@@ -113,7 +154,7 @@ export const ThumbnailExtract = ({
           ))}
         {canExtractMore && (
           <button
-            className={styles.extractButton}
+            className={`${styles.thumbnailChild} ${styles.extractButton}`}
             onClick={handleExtractThumbnail}
           >
             <PlusIcon />
