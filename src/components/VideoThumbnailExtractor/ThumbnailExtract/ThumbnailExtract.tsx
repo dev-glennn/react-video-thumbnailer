@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import * as styles from './ThumbnailExtract.css';
 import { CloseIcon, PlusIcon } from '~/components/icons';
 import type { ThumbnailData } from '~/types';
-import { useThumbnailExtract } from '~/hooks';
+import { useThumbnailExtract, useVideoKeyControls } from '~/hooks';
 
 interface ThumbnailExtractProps {
   videoFile: File;
@@ -29,39 +29,7 @@ export const ThumbnailExtract = ({
     maxThumbnails,
   });
 
-  useEffect(() => {
-    const handleVideoKeyEvents = (e: KeyboardEvent) => {
-      const video = videoRef.current;
-      if (!video) return;
-      if (
-        document.activeElement === video ||
-        ['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName ?? '')
-      )
-        return;
-
-      switch (e.code) {
-        case 'Space':
-        case 'Enter':
-          if (video.paused) {
-            video.play();
-          } else {
-            video.pause();
-          }
-          break;
-        case 'ArrowRight':
-          video.currentTime += 5;
-          break;
-        case 'ArrowLeft':
-          video.currentTime -= 5;
-          break;
-      }
-    };
-
-    document.addEventListener('keydown', handleVideoKeyEvents);
-    return () => {
-      document.removeEventListener('keydown', handleVideoKeyEvents);
-    };
-  }, []);
+  useVideoKeyControls(videoRef);
 
   return (
     <div className={styles.thumbnailExtractWrap}>
