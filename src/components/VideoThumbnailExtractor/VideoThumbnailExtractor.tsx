@@ -87,7 +87,6 @@ export const VideoThumbnailExtractor = ({
       alert('추출된 썸네일이 없어요');
       return;
     }
-    console.log(thumbnails);
     onSubmit(thumbnails);
     onClose();
   }, [hasNoThumbnails, onClose, onSubmit, thumbnails]);
