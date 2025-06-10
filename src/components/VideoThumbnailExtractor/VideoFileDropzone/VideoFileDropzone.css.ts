@@ -12,7 +12,7 @@ export const drag = recipe({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '1rem',
+    gap: '0.65rem',
     cursor: 'pointer',
   },
   variants: {
@@ -34,16 +34,17 @@ export const drag = recipe({
 });
 
 export const icon = style({
-  fontSize: '2.25rem',
+  width: '5rem',
+  height: '5rem',
 });
 
 export const title = style({
-  fontSize: '1.125rem',
+  fontSize: '1rem',
   fontWeight: 500,
 });
 
 export const description = style({
-  fontSize: '0.875rem',
+  fontSize: '0.75rem',
   color: vars.color.gray[500],
   marginTop: '0.25rem',
 });
