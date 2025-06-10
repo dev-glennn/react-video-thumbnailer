@@ -5,7 +5,7 @@ import { CloseIcon } from '~/components/icons';
 
 interface ThumbnailItemProps {
   thumbnail: ThumbnailData;
-  onRemove: (id: string) => void;
+  onRemove?: (id: string) => void;
 }
 
 export const ThumbnailItem = memo(
@@ -13,11 +13,13 @@ export const ThumbnailItem = memo(
     return (
       <div
         className={`${styles.thumbnailChild} ${styles.thumbnail}`}
-        onClick={() => onRemove(thumbnail.id)}
+        onClick={() => (onRemove ? onRemove(thumbnail.id) : undefined)}
       >
-        <button className={styles.thumbnailRemoveButton}>
-          <CloseIcon />
-        </button>
+        {onRemove && (
+          <button className={styles.thumbnailRemoveButton}>
+            <CloseIcon />
+          </button>
+        )}
         <img
           className={styles.thumbnailImage}
           src={thumbnail.imageData}

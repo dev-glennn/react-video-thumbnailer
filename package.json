@@ -1,6 +1,6 @@
 {
   "name": "react-video-thumbnailer",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "author": "11h_48m",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
@@ -42,9 +42,9 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.es.js",
-      "require": "./dist/index.cjs.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.cjs.js"
     },
     "./style.css": "./dist/style.css"
   }

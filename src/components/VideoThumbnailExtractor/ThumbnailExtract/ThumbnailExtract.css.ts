@@ -20,8 +20,11 @@ export const video = style({
 });
 
 export const thumbnailsWrap = style({
-  marginTop: '0.65rem',
   gap: '0.3rem',
+});
+
+globalStyle(`${videoWrap} + ${thumbnailsWrap}`, {
+  marginTop: '0.65rem',
 });
 
 export const thumbnailLayoutVariants = styleVariants({
