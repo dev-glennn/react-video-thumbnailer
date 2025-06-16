@@ -1,6 +1,6 @@
 # 📹 react-video-thumbnailer
 
-![실행 예제](public/example.png)
+![실행 예제](https://i.ibb.co/3yjSKjX7/example.png)
 
 비디오 파일로부터 썸네일을 추출하는 React 컴포넌트입니다.  
 **업로드 → 썸네일 추출 → 선택 및 전달** 과정을 모달로 제공합니다.
@@ -82,5 +82,6 @@ function App() {
 
 ## 🧪 예제
 
-![테스트 이미지](public/test.png)
+![테스트 이미지](https://i.ibb.co/2Tj5jCg/test.png)
+
 `yarn dev` 를 사용하여 아래와 같은 예제를 실행해볼 수 있습니다.
